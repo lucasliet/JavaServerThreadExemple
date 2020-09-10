@@ -15,7 +15,7 @@ public class Server {
 	
 	public Server() throws IOException {
 		this.running = new AtomicBoolean(true);
-		this.server = new ServerSocket(3333);
+		this.server = new ServerSocket(33333);
 		this.threadPool = Executors.newCachedThreadPool();		
 	}
 	
