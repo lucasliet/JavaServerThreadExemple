@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Server {
@@ -14,12 +15,13 @@ public class Server {
 	private ExecutorService threadPool;
 	
 	public Server() throws IOException {
+		System.out.println("--- Starting Server ---");
 		this.running = new AtomicBoolean(true);
-		this.server = new ServerSocket(33333);
-		this.threadPool = Executors.newCachedThreadPool();		
+		this.server = new ServerSocket(3333);
+		this.threadPool = Executors.newFixedThreadPool(4);		
 	}
 	
-	public void run() throws IOException {
+	public void run(){
 		while(this.running.get()) {
 			try {
 				Socket socket = this.server.accept();
@@ -28,8 +30,8 @@ public class Server {
 				TaskDeliver tasks = new TaskDeliver(threadPool, socket, this);
 
 				this.threadPool.execute(tasks);
-			} catch (SocketException e) {
-				if (!this.running.get())
+			} catch (Exception e) {
+				if (!this.running.get()) 
 					System.out.println("Server isn't running");
 			}
 		}
@@ -43,10 +45,8 @@ public class Server {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		System.out.println("--- Starting Server ---");	
-		
-		
-		
+		var server = new Server();
+		server.run();
 	}
 
 }

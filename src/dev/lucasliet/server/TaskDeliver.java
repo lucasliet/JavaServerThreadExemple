@@ -52,7 +52,7 @@ public class TaskDeliver implements Runnable {
 					}
 					
 					case "c2": {
-						clientOutput.println("Confirmação do comando c2");
+						clientOutput.println("command c2 is running");
 	
 				        Future<String> dbResponse = this.threadPool.submit(() -> {
 				        	System.out.println("Server received c2 command - DB");
@@ -88,7 +88,7 @@ public class TaskDeliver implements Runnable {
 
 				            } catch (InterruptedException | ExecutionException | TimeoutException e) {
 
-				                System.out.println("Timeout: Cancelando a execução do comando c2");
+				                System.out.println("Timeout: canceling c2");
 
 				                apiResponse.cancel(true);
 				                dbResponse.cancel(true);
@@ -104,7 +104,7 @@ public class TaskDeliver implements Runnable {
 					
 					case "stop": {
 						clientOutput.println("Shutting down server");
-						server.stop();
+						this.server.stop();
 						return;
 					}
 					

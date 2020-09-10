@@ -15,7 +15,7 @@ public class Client {
 
 		Thread send = new Thread(() -> {
 			try {
-				System.out.println("Pode enviar comandos!");
+				System.out.println("You can send commands!");
 
 				PrintStream saida = new PrintStream(
 						socket.getOutputStream());
@@ -43,7 +43,7 @@ public class Client {
 
 		Thread receive = new Thread(() -> {
 			try {
-				System.out.println("Recebendo dados do servidor");
+				System.out.println("Receiving data from server");
 				Scanner respostaServidor = new Scanner(
 						socket.getInputStream());
 
