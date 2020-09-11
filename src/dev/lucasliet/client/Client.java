@@ -1,26 +1,34 @@
 package dev.lucasliet.client;
 
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Properties;
 import java.util.Scanner;
 
 public class Client {
 
 	public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException {
-		Socket socket = new Socket("localhost", 3333);
+		var props = new Properties();
+		props.load(new FileReader("conf.ini"));
+		
+		var socket = new Socket(
+				"localhost",
+				Integer.parseInt(props.getProperty("port"))
+		);
 
 		System.out.println("Connection Stablished");
 
-		Thread send = new Thread(() -> {
+		var send = new Thread(() -> {
 			try {
 				System.out.println("You can send commands!");
 
-				PrintStream saida = new PrintStream(
+				var saida = new PrintStream(
 						socket.getOutputStream());
 
-				Scanner teclado = new Scanner(System.in);
+				var teclado = new Scanner(System.in);
 
 				while (teclado.hasNextLine()) {
 
@@ -41,15 +49,15 @@ public class Client {
 			}
 		});
 
-		Thread receive = new Thread(() -> {
+		var receive = new Thread(() -> {
 			try {
 				System.out.println("Receiving data from server");
-				Scanner respostaServidor = new Scanner(
+				var respostaServidor = new Scanner(
 						socket.getInputStream());
 
 				while (respostaServidor.hasNextLine()) {
 
-					String linha = respostaServidor.nextLine();
+					var linha = respostaServidor.nextLine();
 					System.out.println(linha);
 				}
 

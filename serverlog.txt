@@ -1,0 +1,41 @@
+
+
+--- Starting Server ---
+
+11/09/2020 at 14:57:34 BRT
+
+--- Starting Server ---
+
+11/09/2020 at 14:57:55 BRT
+
+New Client on port: 54148
+
+=== Delivering tasks to client Socket[addr=/127.0.0.1,port=54148,localport=3333] === 
+
+
+running command c1
+
+Server received c2 command - DB
+
+Server received c2 command - API
+
+Server finished c2 command - API
+
+Waiting results from API and DB
+
+Server finished c2 command - DB
+
+Server finished c2 results
+
+--- Starting Server ---
+
+11/09/2020 at 14:58:46 BRT
+
+New Client on port: 54154
+
+=== Delivering tasks to client Socket[addr=/127.0.0.1,port=54154,localport=3333] === 
+
+
+--- Stopping Server ---
+
+Server isn't running

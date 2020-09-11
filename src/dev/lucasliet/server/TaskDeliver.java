@@ -26,9 +26,9 @@ public class TaskDeliver implements Runnable {
 	@Override
 	public void run() {
 		try {
-			System.out.printf("=== Delivering tasks to client %s === %n" , socket);
-			Scanner clientInput = new Scanner(socket.getInputStream());
-			PrintStream clientOutput = new PrintStream(socket.getOutputStream());
+			this.server.log(String.format("=== Delivering tasks to client %s ===" , socket));
+			var clientInput = new Scanner(socket.getInputStream());
+			var clientOutput = new PrintStream(socket.getOutputStream());
 			
 			while(clientInput.hasNextLine()) {
 				String command = clientInput.nextLine();
@@ -36,9 +36,9 @@ public class TaskDeliver implements Runnable {
 				switch (command) {
 				
 					case "c1": {						
-						clientOutput.println("command c1 is running");
+						clientOutput.println("command c1 added to queue");
 		                this.threadPool.execute( () -> {
-		                	System.out.println("running command c1"); 
+		                	this.server.log("running command c1"); 
 
 		            		try {
 		            			Thread.sleep(20000); //task time simulation
@@ -52,32 +52,32 @@ public class TaskDeliver implements Runnable {
 					}
 					
 					case "c2": {
-						clientOutput.println("command c2 is running");
+						clientOutput.println("command c2 added to queue");
 	
 				        Future<String> dbResponse = this.threadPool.submit(() -> {
-				        	System.out.println("Server received c2 command - DB");
+				        	this.server.log("Server received c2 command - DB");
 				    		clientOutput.println("Processing c2 command - DB");
 
 				    		Thread.sleep(15000); //task time simulation
 
 				    		int num = new Random().nextInt(100) + 1; //number from 1 to 100
-				    		System.out.println("Server finished c2 command - DB");
+				    		this.server.log("Server finished c2 command - DB");
 				    		return Integer.toString(num);
 				        });
 				        
 				        Future<String> apiResponse = this.threadPool.submit(() -> {
-				        	System.out.println("Server received c2 command - API");
+				        	this.server.log("Server received c2 command - API");
 				    		clientOutput.println("Processing c2 command - API");
 
 				    		Thread.sleep(10000); //task time simulation
 
 				    		int num = new Random().nextInt(100) + 1; //number from 1 to 100
-				    		System.out.println("Server finished c2 command - API");
+				    		this.server.log("Server finished c2 command - API");
 				    		return Integer.toString(num);
 				        });
 	
 				        this.threadPool.execute(() -> {
-				        	System.out.println("Waiting results from API and DB");
+				        	this.server.log("Waiting results from API and DB");
 
 				            try {
 				                String apiData = apiResponse.get(20, TimeUnit.SECONDS); //Timeout limit
@@ -88,7 +88,7 @@ public class TaskDeliver implements Runnable {
 
 				            } catch (InterruptedException | ExecutionException | TimeoutException e) {
 
-				                System.out.println("Timeout: canceling c2");
+				            	this.server.log("Timeout: canceling c2");
 
 				                apiResponse.cancel(true);
 				                dbResponse.cancel(true);
@@ -96,7 +96,7 @@ public class TaskDeliver implements Runnable {
 				                clientOutput.println("c2 request timeout");
 				            }
 
-				            System.out.println("Server finished c2 results");
+				            this.server.log("Server finished c2 results");
 				        });
 				        
 						break;
